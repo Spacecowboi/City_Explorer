@@ -6,7 +6,7 @@ import axios from 'axios';
 // import API_KEY from 'src/vite.env'
 // import API_KEY from 'src/vite.env';
 
-const API_KEY = process.env.REACT_APP_LOCATIONIQ_API_KEY;
+const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
 class App extends React.Component {
   constructor() {

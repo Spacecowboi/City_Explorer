@@ -2,16 +2,17 @@ import React from 'react';
 import weather from '../assets/weather.json';
 // import { Link } from 'react-router-dom';
 
-let API_KEY = process.env.REACT_APP_LOCATIONIQ_API_KEY;
+let API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
 class Explorer extends React.Component {
 
   render() {
 
-    let { location } = this.props;
+    let { location } = this.props;  
     let lat = location ? location.lat : '';
     let lon = location ? location.lon : '';
 
+    
     let staticMapUrl = `https://maps.locationiq.com/v3/staticmap?key=${API_KEY}&center=${lat},${lon}$zoom=9`;
 
     return (
