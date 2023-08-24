@@ -5,10 +5,9 @@ import Explorer from './components/Explorer';
 import axios from 'axios';
 import Weather from './components/Weather';
 
-// import API_KEY from 'src/vite.env'
-// import API_KEY from 'src/vite.env';
 
 const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 class App extends React.Component {
   constructor() {
@@ -34,7 +33,7 @@ class App extends React.Component {
         console.log('SUCCESS: ', response.data);
         this.setState({ location: response.data[0] });
         const { lat, lon } = response.data[0];
-        axios.get(`/weather?lat=${lat}&lon=${lon}`)
+        axios.get(`${SERVER_URL}/weather?lat=${lat}&lon=${lon}`)
         .then(response => {
           this.setState({forecastData: response.data});
         })
@@ -46,15 +45,6 @@ class App extends React.Component {
         this.setState({ error: error });
       });
   }
-
-  // const handleCitySearch = async () => {
-  //   try {
-  //     const response = await axios.get(`/weather?lat=${lat}&lon=${lon}`);
-  //     const forecastData = response.data;
-  //   } catch (error) {
-  //     console.error("Problem getting forecast data:", error);
-  //   }
-  // }
 
   handleChange = (e) => {
     this.setState({ searchQuery: e.target.value });
