@@ -1,8 +1,10 @@
 import React from 'react';
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Explorer from './components/Explorer';
-// import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import axios from 'axios';
+import Weather from './components/Weather';
+
 // import API_KEY from 'src/vite.env'
 // import API_KEY from 'src/vite.env';
 
@@ -15,6 +17,7 @@ class App extends React.Component {
       searchQuery: '',
       location: null,
       error: null,
+      forecastData: null,
     }
   }
 
@@ -30,11 +33,28 @@ class App extends React.Component {
       .then(response => {
         console.log('SUCCESS: ', response.data);
         this.setState({ location: response.data[0] });
+        const { lat, lon } = response.data[0];
+        axios.get(`/weather?lat=${lat}&lon=${lon}`)
+        .then(response => {
+          this.setState({forecastData: response.data});
+        })
+        .catch(error => {
+          console.error('WE HAVE A PROBLEM CHIEF! NO FORECAST DATA!', error)
+        });
       }).catch(error => {
         console.log('UGH OOOOH:', error);
         this.setState({ error: error });
       });
   }
+
+  // const handleCitySearch = async () => {
+  //   try {
+  //     const response = await axios.get(`/weather?lat=${lat}&lon=${lon}`);
+  //     const forecastData = response.data;
+  //   } catch (error) {
+  //     console.error("Problem getting forecast data:", error);
+  //   }
+  // }
 
   handleChange = (e) => {
     this.setState({ searchQuery: e.target.value });
@@ -47,7 +67,6 @@ class App extends React.Component {
         <header>
           <h1>Welcome to City Explorer!</h1>
         </header>
-        {/* <BrowserRouter> */}
           <form onSubmit={this.handleForm}>
             <input placeholder="Explore!" type="text" name="city" onChange={this.handleChange} />
             <button type='submit'>
@@ -55,11 +74,6 @@ class App extends React.Component {
             </button>
           </form>
           <Explorer location={this.state.location} query={this.state.searchQuery} />
-          {/* <Routes> */}
-            {/* <Route exact path="/search" element={<Explorer location={this.state.location} query={this.state.searchQuery} />} /> */}
-            {/* <Route path="/" element={<p>Please Enter a location to see results.</p>} /> */}
-          {/* </Routes> */}
-        {/* </BrowserRouter> */}
         {this.state.error
           ? (
             <h2>
@@ -67,6 +81,9 @@ class App extends React.Component {
             </h2>
           )
           : null}
+          {this.state.forecastData ? (
+            < Weather forecastData={this.state.forecastData} />
+          ) : null}
       </>
     )
   }
