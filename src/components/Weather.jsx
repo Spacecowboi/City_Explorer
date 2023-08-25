@@ -1,4 +1,10 @@
 import React from "react";
+import axios from "axios";
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+
+class Weather extends React.Component {
+  constructor() {}
+}
 
 const Weather = ({ forecastData }) => {
     return (
@@ -20,4 +26,12 @@ const Weather = ({ forecastData }) => {
     );
   };
   
+  axios.get(`${SERVER_URL}/weather?lat=${lat}&lon=${lon}`)
+  .then(response => {
+    this.setState({forecastData: response.data});
+  })
+  .catch(error => {
+    console.error('WE HAVE A PROBLEM CHIEF! NO FORECAST DATA!', error)
+  });
+
   export default Weather;

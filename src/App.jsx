@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Explorer from './components/Explorer';
 import axios from 'axios';
 import Weather from './components/Weather';
+import Movies from './components/Movies';
 
 
 const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
@@ -17,20 +18,17 @@ class App extends React.Component {
       location: null,
       error: null,
       forecastData: null,
+      // movies: [],
     }
   }
 
-  setSearchQuery = (query) => {
-    this.setState({ searchQuery: query });
-  }
-
-  handleForm = (e) => {
+  handleSearch = (e) => {
     console.log('Form Submitted');
     e.preventDefault();
     console.log(API_KEY);
     axios.get(`https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.searchQuery}&format=json`)
-      .then(response => {
-        console.log('SUCCESS: ', response.data);
+    .then(response => {
+      console.log('SUCCESS: ', response.data);
         this.setState({ location: response.data[0] });
         const { lat, lon } = response.data[0];
         axios.get(`${SERVER_URL}/weather?lat=${lat}&lon=${lon}`)
@@ -40,14 +38,19 @@ class App extends React.Component {
         .catch(error => {
           console.error('WE HAVE A PROBLEM CHIEF! NO FORECAST DATA!', error)
         });
-      }).catch(error => {
-        console.log('UGH OOOOH:', error);
-        this.setState({ error: error });
+        console.log(`${SERVER_URL}/movies?search=${this.state.searchQuery}`);
+      })
+      .catch(error => {
+        console.error('Error fetching location data: ', error);
+        this.setState({ error: error.message });
       });
   }
-
   handleChange = (e) => {
     this.setState({ searchQuery: e.target.value });
+  }
+
+  setSearchQuery = (query) => {
+    this.setState({ searchQuery: query });
   }
 
   render() {
@@ -57,13 +60,14 @@ class App extends React.Component {
         <header>
           <h1>Welcome to City Explorer!</h1>
         </header>
-          <form onSubmit={this.handleForm}>
+          <form onSubmit={this.handleSearch}>
             <input placeholder="Explore!" type="text" name="city" onChange={this.handleChange} />
             <button type='submit'>
               Search
             </button>
           </form>
           <Explorer location={this.state.location} query={this.state.searchQuery} />
+          {this.state.movies.length > 0 && <Movies movies={this.state.movies} />}
         {this.state.error
           ? (
             <h2>
@@ -74,11 +78,13 @@ class App extends React.Component {
           {this.state.forecastData ? (
             < Weather forecastData={this.state.forecastData} />
           ) : null}
+          <Movies searchQuery={this.state.searchQuery}/>
       </>
     )
   }
 }
 
+
 export default App
 
-// Starter Code used from Demo code 8/21/23 //
+
