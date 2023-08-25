@@ -68,9 +68,11 @@ class App extends React.Component {
           )
           : null}
           {this.state.location ? (
+            <>
             < Weather location={this.state.location} />
+            < Movies searchQuery={this.state.location}/>
+            </>
           ) : null}
-          <Movies searchQuery={this.state.searchQuery}/>
       </>
     )
   }
