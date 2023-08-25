@@ -3,10 +3,41 @@ import axios from "axios";
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 class Weather extends React.Component {
-  constructor() {}
+  constructor(props) {
+    super(props);
+    this.state = {
+      forecastData: [],
+      error: null,
+    }
+  }
+  
+componentDidMount = () => {
+
+  this.fetchWeatherData();
+
 }
 
-const Weather = ({ forecastData }) => {
+fetchWeatherData = () => {
+  //this works as long as lat and lon are passed as props
+  const { lat, lon } = this.props;
+
+  axios.get(`${SERVER_URL}/weather?lat=${lat}&lon=${lon}`)
+  .then((response) => {
+    this.setState({forecastData: response.data});
+  })
+
+  .catch((error) => {
+    console.error("We aint GOT weather data!:", error);
+    this.setState({error: "No weather data chief sorry."});
+  });
+};
+
+//render the forecastData after the state has been updated
+
+  render() {
+
+    const { forecastData } = this.state;
+
     return (
       <div className="container">
         <h2>Weather Forecast</h2>
@@ -24,14 +55,7 @@ const Weather = ({ forecastData }) => {
         </div>
       </div>
     );
-  };
-  
-  axios.get(`${SERVER_URL}/weather?lat=${lat}&lon=${lon}`)
-  .then(response => {
-    this.setState({forecastData: response.data});
-  })
-  .catch(error => {
-    console.error('WE HAVE A PROBLEM CHIEF! NO FORECAST DATA!', error)
-  });
+  }
+}
 
   export default Weather;

@@ -1,6 +1,6 @@
 import React from 'react';
 import weather from '../assets/weather.json';
-// import { Link } from 'react-router-dom';
+
 
 let API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
@@ -17,7 +17,6 @@ class Explorer extends React.Component {
 
     return (
       <main>
-        {/* <Link to="/">Go Home</Link> */}
         <section>
           <h2>Maps</h2>
           <p>{this.props.query}</p>

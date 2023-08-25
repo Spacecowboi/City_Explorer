@@ -18,26 +18,17 @@ class App extends React.Component {
       location: null,
       error: null,
       forecastData: null,
-      // movies: [],
     }
   }
 
   handleSearch = (e) => {
     console.log('Form Submitted');
     e.preventDefault();
-    console.log(API_KEY);
     axios.get(`https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.searchQuery}&format=json`)
     .then(response => {
       console.log('SUCCESS: ', response.data);
         this.setState({ location: response.data[0] });
         const { lat, lon } = response.data[0];
-        axios.get(`${SERVER_URL}/weather?lat=${lat}&lon=${lon}`)
-        .then(response => {
-          this.setState({forecastData: response.data});
-        })
-        .catch(error => {
-          console.error('WE HAVE A PROBLEM CHIEF! NO FORECAST DATA!', error)
-        });
         console.log(`${SERVER_URL}/movies?search=${this.state.searchQuery}`);
       })
       .catch(error => {
@@ -45,6 +36,7 @@ class App extends React.Component {
         this.setState({ error: error.message });
       });
   }
+
   handleChange = (e) => {
     this.setState({ searchQuery: e.target.value });
   }
@@ -75,8 +67,8 @@ class App extends React.Component {
             </h2>
           )
           : null}
-          {this.state.forecastData ? (
-            < Weather forecastData={this.state.forecastData} />
+          {this.state.location ? (
+            < Weather location={this.state.location} />
           ) : null}
           <Movies searchQuery={this.state.searchQuery}/>
       </>
