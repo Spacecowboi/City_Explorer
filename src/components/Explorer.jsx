@@ -1,5 +1,5 @@
 import React from 'react';
-import weather from '../assets/weather.json';
+
 
 
 let API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
@@ -26,12 +26,6 @@ class Explorer extends React.Component {
         </section>
         <section>
           <ul>
-          {weather.data.map((dailyForcast, index) => (
-            <li key={index}>
-              <p>{dailyForcast.datetime}</p>
-              <p>{dailyForcast.temp}</p>
-            </li>
-          ))}
           </ul>
         </section>
       </main>

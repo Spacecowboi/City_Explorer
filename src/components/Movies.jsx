@@ -15,8 +15,8 @@ class Movies extends React.Component {
         this.handleMovies();
     }
 
-    handleMovies = async () => {
-
+    handleMovies = async () => {  
+      console.log(this.props.city);
         axios.get(`${SERVER_URL}/movies?city=${this.props.searchQuery}`)
         .then(response => {
             this.setState({ movies: response.data });

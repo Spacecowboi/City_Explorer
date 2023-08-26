@@ -18,6 +18,7 @@ class App extends React.Component {
       location: null,
       error: null,
       forecastData: null,
+      movies: []
     }
   }
 
@@ -59,7 +60,6 @@ class App extends React.Component {
             </button>
           </form>
           <Explorer location={this.state.location} query={this.state.searchQuery} />
-          {this.state.movies.length > 0 && <Movies movies={this.state.movies} />}
         {this.state.error
           ? (
             <h2>
@@ -70,7 +70,7 @@ class App extends React.Component {
           {this.state.location ? (
             <>
             < Weather location={this.state.location} />
-            < Movies searchQuery={this.state.location}/>
+            < Movies searchQuery={this.state.searchQuery}/>
             </>
           ) : null}
       </>
